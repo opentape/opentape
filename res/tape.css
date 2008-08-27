@@ -1,0 +1,35 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {margin: 0;padding: 0;border: 0;outline: 0;font-style: inherit;font-size: 100%;font-family: inherit;vertical-align: baseline;}
+ol, ul {list-style: none;}
+table {border-collapse: separate;border-spacing: 0;}
+caption, th, td {text-align: left;font-weight: normal;}
+blockquote:before, blockquote:after,q:before, q:after {content: "";}
+blockquote, q {quotes: "" "";}
+
+body {color:#111;background:#fff;font:13px/1.6em Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif;}
+a {color:#005AC8;text-decoration:none;}
+a:hover {text-decoration:underline;}
+
+.banner{color:#fff;height:60px;left:0;padding:0 20px;position:fixed;top:0;width:100%;z-index:5;}
+.banner a{color:#fff;text-decoration:underline;}
+.flag h1{font-size:16px;font-weight:700;margin:10px 0 0;}
+.flag h2 {font-weight:400;}
+.flash_player {position:absolute;top:0;left:-5555px;overflow:hidden;}
+.footer {margin:20px;text-align:right;}
+.nav{position:absolute;right:45px;top:0;}
+.nav strong a{color:#fff;display:block;font-size:11px;padding:2px;}
+.nav strong a:hover{color:#000;}
+.songs{margin:60px 0 0;}
+li.hilite{background:#ddd;}
+li.song{border-bottom:1px solid #ddd;cursor:pointer;padding:20px;position:relative;}
+li.song .clock{display:inline;}
+li.song .info{font-size:14px;position:absolute;right:20px;top:20px;}
+li.song .info .clock{font-weight:700;margin:0 5px;}
+li.song .info strong{color:#555;font-weight:400;}
+li.song .mp3{font-size:14px;line-height:25px;margin:0 10px;vertical-align:top;}
+li.song .name{float:left;font-size:20px;}
+li.song:hover{background:#eee;}
+* html .songs {margin:0;}
+* html li.song {border:0;}
+
+.green {color:#393;}
+.grey {color:#555;}

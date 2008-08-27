@@ -1,0 +1,46 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {margin: 0;padding: 0;border: 0;outline: 0;font-style: inherit;font-size: 100%;font-family: inherit;vertical-align: baseline;}
+ol, ul {list-style: none;}
+table {border-collapse: separate;border-spacing: 0;}
+caption, th, td {text-align: left;font-weight: normal;}
+blockquote:before, blockquote:after,q:before, q:after {content: "";}
+blockquote, q {quotes: "" "";}
+
+body {color:#111;background:#fff;font: 13px/1.6em Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif;}
+a {color:#005AC8;text-decoration:none;}
+a:hover {text-decoration:underline;}
+
+form{font-size:14px;margin:10px 0 0;}
+h1{float:left;font-size:20px;line-height:60px;width:150px;}
+input{font-size:14px;margin:0 5px 10px 0;}
+input.save{margin-left:80px;}
+label{display:block;float:left;font-weight:700;width:80px;}
+
+#codebox{height:150px;margin:5px 10px 0 0;width:420px;}
+.ajax_status {font-weight:700;color:#000;background:#ff9;position:absolute;top:15px;left:420px;font-size:25px;text-align:center;}
+.banner{color:#fff;height:60px;left:0;padding:0 20px;position:fixed;top:0;width:100%;z-index:5;background:#111;}
+.banner a{color:#fff;}
+.content{margin:80px 0 0;padding:0 20px;}
+.content object{margin:10px 0 0;}
+.footer {margin:20px 0;text-align:right;}
+.nav{line-height:30px;margin:15px 0 0;}
+.nav li a{border:1px solid #99CCFF;display:block;float:left;margin-left:-1px;padding:0 10px;}
+.nav li#active a {background:#9cf;color:#000;}
+.nav,.nav li{float:left;}
+.nav #user{text-align:right;position:absolute;top:0;right:40px;width:230px;line-height:50px;}
+.nav #user a#home {font-size:20px;font-weight:700;}
+.nav #user a {font-size:11px;border:0;float:none;display:inline;color:#fff;font-size:11px;}
+.nav #user #logout {position:absolute;bottom:5px;right:10px;line-height:1em;color:#eee;}
+.section{border-bottom:1px solid #ddd;margin:0 0 20px;padding:0 0 20px;}
+.section h2{font-size:18px;line-height:15px;margin:10px 0 0;}
+.section p{color:#333;font-size:12px;margin:5px 0;}
+.sortie{border:5px solid #ddd;cursor:move;width:80%;}
+.sortie input.save{margin-left:0;}
+.sortie li{border-bottom:1px solid #eee;border-top:1px solid #eee;font-size:20px;position:relative;}
+.sortie li .hover{text-decoration:underline;}
+.sortie li div.abc{color:#2695e3;cursor:pointer;display:inline;font-size:11px;position:absolute;right:50px;top:9px;}
+.sortie li div.ex{cursor:pointer;display:inline;font-size:11px;position:absolute;right:10px;top:9px;color:#e02;}
+.sortie li div.inputs{cursor:default;display:none;}
+.sortie li div.inputs input.field{border:1px solid #aaa;font-size:12px;padding:3px;width:30%;}
+.sortie li div.name,.sortie li div.inputs{padding:10px;}
+.sortie li span.original_filename {color:#888;font-size:12px;}
+.sortie li.hover{background:#eee;}
