@@ -596,6 +596,7 @@ function do_post_request($url, $data, $optional_headers = null) {
 		
 		}
 	// everyone else is via the stream
+	// from here: http://netevil.org/blog/2006/nov/http-post-from-php-without-curl
 	} else {
 	
 	     $params = array('http' => array(

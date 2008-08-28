@@ -30,7 +30,7 @@
 	// 604800 = week in seconds
 	if (  
 		 (!isset($prefs_struct['check_updates']) || $prefs_struct['check_updates'] == 1 ) &&
-	 	 ((time() - $prefs_struct['last_update_check']) > 604800)
+	 	 ((!isset($prefs_struct['last_update_check']) || (time() - $prefs_struct['last_update_check']) > 604800))
 	 	) {
 		$prefs_struct = check_for_update();
 		if ($prefs_struct===false) { header("Location: " . $REL_PATH . "code/warning.php"); }
