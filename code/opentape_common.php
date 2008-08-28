@@ -74,6 +74,23 @@ function escape_for_json($string) {
 	return preg_replace('/"/', '\"', $string);
 }
 
+function get_base_url() {
+
+	global $REL_PATH;
+
+	//if ( ($_SERVER['SERVER_PORT']==80 && (empty($_SERVER['HTTPS']) || !strcasecmp($_SERVER['HTTPS'],"off"))) ) {
+	return 'http://' . $_SERVER['HTTP_HOST'] . $REL_PATH;
+	/*
+	} elseif ( ($_SERVER['SERVER_PORT']!=80 && (empty($_SERVER['HTTPS']) || !strcasecmp($_SERVER['HTTPS'],"off"))) ) {
+		return 'http://' . $_SERVER['HTTP_HOST'] . ":" . $_SERVER['SERVER_PORT'] . $REL_PATH;
+	} elseif ($_SERVER['SERVER_PORT']==443 && (!empty($_SERVER['HTTPS']) || strcasecmp($_SERVER['HTTPS'],"off"))) {
+		return 'https://' . $_SERVER['HTTP_HOST'] . $REL_PATH;	
+	} else {
+		return 'https://' . $_SERVER['HTTP_HOST'] . ":" . $_SERVER['SERVER_PORT'] . $REL_PATH;	
+	}*/
+
+}
+
 function is_logged_in() {
 	
 	if ( file_exists( constant("SETTINGS_PATH") . ".opentape_session.array" ) ) {
@@ -141,28 +158,50 @@ function is_password_set() {
 	
 }
 
+// Here we give all users cookies, then we add/remove these session id's
+// into the session file
+function check_cookie() {
+
+	if (!isset($_COOKIE["opentape_session"])) {
+		if (!strcasecmp($_SERVER['HTTP_HOST'],"localhost")) {
+			setcookie("opentape_session", md5("MIXTAPESFORLIFE" .  microtime_float()), (time() + (86400*365)), "/", "");
+		} elseif (preg_match('/:\d+$/', $_SERVER['HTTP_HOST'])) {
+			setcookie("opentape_session", md5("MIXTAPESFORLIFE" .  microtime_float()), (time() + (86400*365)), "/", "");
+		} else {
+			setcookie("opentape_session", md5("MIXTAPESFORLIFE" .  microtime_float()), (time() + (86400*365)), "/", $_SERVER['HTTP_HOST']);
+		}
+	}
+
+}
+
 function create_session() {
 	
 	$session_struct = array();
 	$session_item = array();
 	
-	if (file_exists(constant("SETTINGS_PATH") . ".opentape_session.array" )) {
-		$session_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . ".opentape_session.array" );
-		$session_struct = unserialize($session_struct_data); 
-	}
+	if (isset($_COOKIE["opentape_session"])) {
+		
+		if (file_exists(constant("SETTINGS_PATH") . ".opentape_session.array" )) {
+			$session_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . ".opentape_session.array" );
+			$session_struct = unserialize($session_struct_data); 
+		}
+		
+		$session_item['key'] = $_COOKIE["opentape_session"];
+		$session_item['ts'] = time();
+		array_push($session_struct,$session_item);
+			
+		$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_session.array", serialize($session_struct));
+		if ($bytes_written===false) {
+			return -1;
+		}
+			
+		return true;	
 	
-	$session_item['key'] = md5("MIXTAPESFORLIFE" .  microtime_float());
-	$session_item['ts'] = time();
-	array_push($session_struct,$session_item);
+	} else {
+	
+		return false;
 		
-	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_session.array", serialize($session_struct));
-	if ($bytes_written===false) {
-		return -1;
 	}
-		
-	setcookie("opentape_session", $session_item['key'], time() + (86400*7), "/");
-
-	return true;	
 
 }
 
@@ -190,9 +229,7 @@ function remove_session() {
 		if ($bytes_written===false) {
 			return -1;
 		}
-			
-		setcookie("opentape_session", $session_item['key'], (time() - 86400), "/");
-		
+					
 	} else {
 		// if the session file doesn't exist, there's nothing to remove the session from
 		// so we just say ok.
@@ -346,7 +383,7 @@ function get_total_runtime_seconds() {
 
 	$songlist_struct = get_songlist_struct();
 	
-	$total_secs;
+	$total_secs = 0;
 	foreach ($songlist_struct as $pos => $row) { 
 		$total_secs += $row['playtime_seconds'];
 	}
@@ -359,7 +396,8 @@ function get_total_runtime_seconds() {
 function get_total_runtime_string() {
 	
 	$seconds = get_total_runtime_seconds();
-
+	$string = "";
+	
 	$mins = round($seconds / 60);
 	$secs = $seconds % 60;
 	
@@ -494,6 +532,8 @@ function check_for_update() {
 }
 
 function announce_songs($songlist_struct) {
+	
+	global $REL_PATH;
 
 	$ts = time();
 	
@@ -505,7 +545,7 @@ function announce_songs($songlist_struct) {
 	$data = http_build_query(
 			array(
 				'version' => constant("VERSION"),
-				'url' => $_SERVER['HTTP_HOST'] . $REL_PATH,
+				'url' => get_base_url(),
 				'songs' => $version_struct 
 			)	
 		);
@@ -529,30 +569,65 @@ function announce_songs($songlist_struct) {
 }
 
 function do_post_request($url, $data, $optional_headers = null) {
-				
-	$curl_handle = curl_init();
-	curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($curl_handle, CURLOPT_URL, "$url");
-	curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
-	curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($curl_handle, CURLOPT_USERAGENT, "Opentape " . constant("VERSION"));
-	curl_setopt($curl_handle, CURLOPT_POST, 1);
-	curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
 	
-	$buffer = curl_exec($curl_handle);
-	curl_close($curl_handle);
-		
-	// check for success or failure
-	if (empty($buffer)) {
-		
-		return false;		
+	// People with curl use curl
+	if (extension_loaded("curl")) {
 	
+		$curl_handle = curl_init();
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl_handle, CURLOPT_URL, "$url");
+		curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl_handle, CURLOPT_USERAGENT, "Opentape " . constant("VERSION"));
+		curl_setopt($curl_handle, CURLOPT_POST, 1);
+		curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data);
+		
+		$buffer = curl_exec($curl_handle);
+		curl_close($curl_handle);
+			
+		// check for success or failure
+		if (empty($buffer)) {
+			
+			return false;		
+		
+		} else {
+		
+			return $buffer;
+		
+		}
+	// everyone else is via the stream
 	} else {
 	
-		return $buffer;
-	
-	}
+	     $params = array('http' => array(
+                  'method' => 'POST',
+                  'content' => $data
+               ));
+               
+		 if ($optional_headers !== null) {
+		 	array_push($optional_headers, "User-Agent: Opentape " . constant("VERSION"));		
+		 } else {
+		 	$optional_headers = array();
+		 	array_push($optional_headers, "User-Agent: Opentape " . constant("VERSION"));
+		 }	
+		
+		$params['http']['header'] = $optional_headers;
+		
+		
+		$ctx = stream_context_create($params);
+		$fp = @fopen($url, 'rb', false, $ctx);
+		if (!$fp) {
+			return false;
+			//throw new Exception("Problem with $url, $php_errormsg");
+		}
+		$response = @stream_get_contents($fp);
+		if ($response === false) {
+			return false;
+			//throw new Exception("Problem reading data from $url, $php_errormsg");
+		}
+		return $response;
 
+	}
+	
 }
 
 

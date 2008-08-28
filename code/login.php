@@ -2,8 +2,10 @@
 
 	include("opentape_common.php");
 	
-	if (is_logged_in()) { header("Location: " . $REL_PATH . "code/edit.php"); }
+	check_cookie();
 	
+	if (is_logged_in()) { header("Location: " . $REL_PATH . "code/edit.php"); }
+		
 	if (!empty($_POST['pass'])) {
 		
 		$res = check_password($_POST['pass']);
@@ -32,8 +34,12 @@
 	// check for new versions once a week
 	$prefs_struct = get_opentape_prefs();
 	// 604800 = week in seconds
-	if ( (time() - $prefs_struct['last_update_check']) > 604800 ) {
-		check_for_update();
+	if (  
+		 (!isset($prefs_struct['check_updates']) || $prefs_struct['check_updates'] == 1 ) &&
+	 	 ((time() - $prefs_struct['last_update_check']) > 604800)
+	 	) {
+		$prefs_struct = check_for_update();
+		if ($prefs_struct===false) { header("Location: " . $REL_PATH . "code/warning.php"); }
 	}
 
 ?>
@@ -62,7 +68,7 @@
 		<div class="content">
 		
 		 <div class="section">
-			<form method="post" action="http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>code/login.php" name="login">
+			<form method="post" action="<?php echo get_base_url(); ?>code/login.php" name="login">
 			<label for="pass">Password:</label>
 			<input name="pass" type="password" size="25" /><br />
 			<input type="submit" class="button" value="LOGIN" />

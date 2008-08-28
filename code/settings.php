@@ -2,15 +2,15 @@
 
 	include("opentape_common.php");
 	
-	if (!is_logged_in()) {
-		header("Location: " . $REL_PATH . "code/login.php");
-	}
+	if (!is_logged_in()) { header("Location: " . $REL_PATH . "code/login.php"); }
+	
+	check_cookie();
 	
 	$prefs_struct = get_opentape_prefs();
 
-	// 604800 = week in seconds
-	if ( ((time() - $prefs_struct['last_update_check']) > 604800) && 
-		 (!isset($prefs_struct['check_updates']) || $prefs_struct['check_updates'] == 1 )
+	if (  
+		 (!isset($prefs_struct['check_updates']) || $prefs_struct['check_updates'] == 1 ) &&
+	 	 ((time() - $prefs_struct['last_update_check']) > 604800)
 	 	) {
 		$prefs_struct = check_for_update();
 		if ($prefs_struct===false) { header("Location: " . $REL_PATH . "code/warning.php"); }
@@ -62,14 +62,14 @@
                     <textarea scrolbars="no" name="codebox" cols="70" rows="4" readonly="readonly" id="codebox">
 <object width="300" height="160">
 <param name="allowscriptaccess" value="always" />	
-<param name="movie" value="http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>code/xspf.php" />	
-<embed src="http://<?php echo $_SERVER[HTTP_HOST] . "/" . $REL_PATH; ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>code/xspf.php" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="160"></embed>
+<param name="movie" value="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" />	
+<embed src="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="160"></embed>
 </object>
 </textarea>
 <object width="300" height="160">
                         <param name="allowscriptaccess" value="always" />	
-                        <param name="movie" value="http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>code/xspf.php" />	
-                        <embed src="http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>code/xspf.php" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="160"></embed>
+                        <param name="movie" value="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" />	
+                        <embed src="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="160"></embed>
                     </object>
 
 </div>

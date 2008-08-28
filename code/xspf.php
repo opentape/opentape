@@ -16,8 +16,8 @@
 	echo '<playlist version="0" xmlns="http://xspf.org/ns/0/">' . "\n";
 	echo '<title>' . 'Opentape: ' . count($songlist_struct) . ", " . get_total_runtime_string() . '</title>' . "\n";
 	echo '<creator>' . 'Opentape ' . get_version() . '</creator>' . "\n";
-	echo '<info>' . 'http://' . $_SERVER[HTTP_HOST] . $REL_PATH . '</info>' . "\n";
-	echo '<location>' . 'http://' . $_SERVER[HTTP_HOST] . $REL_PATH . '</location>' . "\n";
+	echo '<info>' . get_base_url() . '</info>' . "\n";
+	echo '<location>' . get_base_url() . '</location>' . "\n";
 	
 	echo '<trackList>' . "\n";
 	
@@ -29,18 +29,18 @@
 		}
 	
 		echo '<track>' . "\n";
-		echo '<location>' . "http://" . $_SERVER[HTTP_HOST] . $REL_PATH . constant("SONGS_PATH") . rawurlencode($row['filename']) . '</location>' . "\n";
+		echo '<location>' . get_base_url() . constant("SONGS_PATH") . rawurlencode($row['filename']) . '</location>' . "\n";
 		echo '<meta rel="type">mp3</meta>' . "\n";
 		
 		echo '<title>';
-		if ($row['opentape_artist']) { echo $row['opentape_artist']; } 
+		if (isset($row['opentape_artist'])) { echo $row['opentape_artist']; } 
 		else { echo htmlentities($row['artist']); } 
 		echo ' - '; 
-		if ($row['opentape_title']) { echo $row['opentape_title']; }
+		if (isset($row['opentape_title'])) { echo $row['opentape_title']; }
 		else { echo htmlentities($row['title']); }
 		echo '</title>';
 		
-		echo '<info>' . "http://" . $_SERVER[HTTP_HOST] . $REL_PATH . '</info>' . "\n";
+		echo '<info>' . get_base_url() . '</info>' . "\n";
 		
 		echo '</track>' . "\n";
 		

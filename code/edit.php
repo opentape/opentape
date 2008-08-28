@@ -3,6 +3,8 @@
 	
 	if (!is_logged_in()) { header("Location: " . $REL_PATH . "code/login.php"); }
 	
+	check_cookie();
+	
 	// Don't allow users to upload non-mp3 files, seriously.
 	if (isset($_FILES['file']) || !preg_match('/mp3$/i', basename($_FILES['file']['name'])) ) {
 	
@@ -26,14 +28,15 @@
 	$prefs_struct = get_opentape_prefs();
 
 	// 604800 = week in seconds
-	if ( ((time() - $prefs_struct['last_update_check']) > 604800) && 
-		 (!isset($prefs_struct['check_updates']) || $prefs_struct['check_updates'] == 1 )
+	if (  
+		 (!isset($prefs_struct['check_updates']) || $prefs_struct['check_updates'] == 1 ) &&
+	 	 ((time() - $prefs_struct['last_update_check']) > 604800)
 	 	) {
 		$prefs_struct = check_for_update();
 		if ($prefs_struct===false) { header("Location: " . $REL_PATH . "code/warning.php"); }
 	}
 	
-	if ( $prefs_struct['announce'] == 1 && !isset($prefs_struct['last_announce_songs']) ) {
+	if ( isset($prefs_struct['announce']) && $prefs_struct['announce'] == 1 && !isset($prefs_struct['last_announce_songs']) ) {
 		announce_songs($songlist_struct);
 	}
 	
@@ -80,7 +83,7 @@
                     <h2>Upload Songs</h2>
                     <p>Choose any <strong>MP3</strong> no larger than <?php echo get_max_upload_mb(); ?> MB (this is the upload_max_filesize set by your web host).</p>
                     <p>For larger files, place them into the <span style="color:#00f">songs/</span> folder via FTP.</p>
-                    <form name="upload" id="upload_form" enctype="multipart/form-data" action="http://<?php echo $_SERVER[HTTP_HOST] . $REL_PATH; ?>code/edit.php" method="post">
+                    <form name="upload" id="upload_form" enctype="multipart/form-data" action="<?php echo get_base_url(); ?>code/edit.php" method="post">
                         <input id="upload_input" name="file" type="file" /><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo get_max_upload_bytes(); ?>" /><br />
                         <input type="submit" class="button" id="upload_button" value="Upload" />
                     </form>	
@@ -99,10 +102,10 @@
                         <li id="<?php echo $pos; ?>">
                             <div class="name">
                                 <span class="original_artist"><?php
-					       if ($row['opentape_artist']) { echo $row['opentape_artist']; } 
+					       if (isset($row['opentape_artist'])) { echo $row['opentape_artist']; } 
 					       else { echo $row['artist']; } 
 				        ?></span> - <span class="original_title"><?php
-					   if ($row['opentape_title']) { echo $row['opentape_title']; } 
+					   if (isset($row['opentape_title'])) { echo $row['opentape_title']; } 
 					   else { echo $row['title']; } 
 				    ?></span> <span class="original_filename">(<?php echo $row['filename']; ?>)</span>
                             </div>

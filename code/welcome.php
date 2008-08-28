@@ -2,6 +2,8 @@
 
 	include("opentape_common.php");
 
+	check_cookie();
+
 	if(is_password_set()) { 
 		header("Location: " . $REL_PATH . "code/login.php");
 	}

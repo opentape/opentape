@@ -1,12 +1,14 @@
 <?
 	
 	require_once("opentape_common.php");
+
+	check_cookie();
 	
 	$songlist_struct = scan_songs();
 	$songlist_struct_original = $songlist_struct;
 	
 	$prefs_struct = get_opentape_prefs();
-	
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--
@@ -32,7 +34,7 @@
 				type: "xml",
 				shuffle: "false",
 				repeat: "list",
-				file: "http://<?php echo $_SERVER['HTTP_HOST'] . $REL_PATH; ?>code/xspf.php"		
+				file: "<?php echo get_base_url(); ?>code/xspf.php"		
 			}
 			var params = {
 				allowscriptaccess: "always"
@@ -42,7 +44,7 @@
 			  name: "openplayer",
 			  styleclass: "flash_player"
 			}
-			swfobject.embedSWF('http://<?php echo $_SERVER['HTTP_HOST'] . $REL_PATH; ?>res/mediaplayer.swf', "openplayer", "0", "0", "8.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF('<?php echo get_base_url(); ?>res/mediaplayer.swf', "openplayer", "0", "0", "8.0.0", false, flashvars, params, attributes);
 		}
 	 </script>
 	</head>
@@ -73,10 +75,10 @@
 			<li class="song" id="song<?php echo $i; ?>">
 			<div class="name">
 				<?php
-					if ($row['opentape_artist']) { echo $row['opentape_artist']; } 
+					if (isset($row['opentape_artist'])) { echo $row['opentape_artist']; } 
 					else { echo $row['artist']; } 
 				?> - <?php 
-					if ($row['opentape_title']) { echo $row['opentape_title']; }
+					if (isset($row['opentape_title'])) { echo $row['opentape_title']; }
 					else { echo $row['title']; }
 				?>
 			</div>
@@ -229,7 +231,7 @@
 			songItem.addClass('hilite');
 						
 			var name = $E('#song'+ id +' .name').getHTML().replace('&amp;','&');
-			document.title = name.trim() + ' / <?php if(!empty($prefs_struct['banner'])) { echo escape_for_inputs($prefs_struct['banner']); } else { echo "OPENTAPE"; } ?>';		
+			document.title = name.trim() + " / <?php if(!empty($prefs_struct['banner'])) { echo escape_for_json($prefs_struct['banner']); } else { echo "OPENTAPE"; } ?>";		
 		}
 	
 		function togglePlayback(id) {
