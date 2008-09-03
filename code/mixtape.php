@@ -22,6 +22,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $REL_PATH; ?>res/tape.css" />
+	<link rel="alternate" type="application/rss+xml" href="<?php echo $REL_PATH; ?>code/rss.php" />
 	<style type="text/css">
 		div.banner { background: #<?php if(!empty($prefs_struct['color'])) { echo $prefs_struct['color']; } else { echo constant("DEFAULT_COLOR"); } ?>; }									
 	</style>

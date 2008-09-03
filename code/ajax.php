@@ -17,7 +17,7 @@
 	}
 	//error_log ("$command - " . print_r($args,1));
 	
-	if (!strcmp($args['password1'], $args['password2']) && !strcmp($command,"create_password")) {
+	if (isset($args['password1']) && !strcmp($args['password1'], $args['password2']) && !strcmp($command,"create_password")) {
 			
 		// don't allow people to set password using this method once the file exists
 		if(is_password_set()) { echo '{"status":false,"command":"' . $command . '","debug":"The password is already configured, login to change it."}'; }
@@ -35,7 +35,7 @@
 			echo '{"status":false,"command":"' . $command . '","debug":""}';
 		}
 				
- 	} elseif (!strcmp($args['password1'], $args['password2']) && !strcmp($command,"change_password")) {
+ 	} elseif (isset($args['password1']) && !strcmp($args['password1'], $args['password2']) && !strcmp($command,"change_password")) {
 
 		if (set_password($args['password1'])) {
 			echo '{"status":true,"command":"' . $command . '","debug":""}';	

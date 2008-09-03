@@ -13,9 +13,10 @@ require_once ('JSON.php');
 ini_set("track_errors","on");
 
 global $REL_PATH;
-$REL_PATH = preg_replace('|settings/[^/]+?$|', '', $_SERVER['REQUEST_URI']);
-$REL_PATH = preg_replace('|code/[^/]+?$|', '', $REL_PATH);
-$REL_PATH = preg_replace('|res/[^/]+?$|', '', $REL_PATH);
+$REL_PATH = preg_replace('|settings/[^/]*?$|', '', $_SERVER['REQUEST_URI']);
+$REL_PATH = preg_replace('|songs/[^/]*?$|', '', $REL_PATH);
+$REL_PATH = preg_replace('|code/[^/]*?$|', '', $REL_PATH);
+$REL_PATH = preg_replace('|res/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|/[^/]+?$|', '/', $REL_PATH);
 $REL_PATH = preg_replace('|/+|', '/', $REL_PATH);
 define("VERSION", "0.1");
@@ -72,6 +73,10 @@ function escape_for_inputs($string) {
 
 function escape_for_json($string) {
 	return preg_replace('/"/', '\"', $string);
+}
+
+function clean_titles($string) {
+	return preg_replace('/\\000/', '', $string);
 }
 
 function get_base_url() {
@@ -268,7 +273,7 @@ function scan_songs() {
 	// List all the files
     while (false !== ($file = readdir($dir_handle)) ) {
 
-		if ( strcmp($file, ".") && strcmp($file, "..") ) {
+		if ( strcmp($file, ".") && strcmp($file, "..") && !strcasecmp(end(explode(".", $file)), "mp3")) {
 
 			// Analyze file and store returned data in $ThisFileInfo
 			// error_log("Analyzing: " . constant("SONGS_PATH") . $file . " file_exists=" . file_exists(constant("SONGS_PATH") . $file));
@@ -283,17 +288,17 @@ function scan_songs() {
 
 				// Check id3 v2 tags, 
 				if (!empty($id3_info['id3v2']['comments']['artist'][0])) {
-					$song_item['artist'] = $id3_info['id3v2']['comments']['artist'][0];
+					$song_item['artist'] = clean_titles($id3_info['id3v2']['comments']['artist'][0]);
 				} elseif (!empty($id3_info['id3v1']['artist'])) {
-					$song_item['artist'] = $id3_info['id3v1']['artist'];
+					$song_item['artist'] = clean_titles($id3_info['id3v1']['artist']);
 				} else { 
 					$song_item['artist'] = "Unknown artist";
 				}
 
 				if (!empty($id3_info['id3v2']['comments']['title'][0])) {
-					$song_item['title'] = $id3_info['id3v2']['comments']['title'][0];
+					$song_item['title'] = clean_titles($id3_info['id3v2']['comments']['title'][0]);
 				} elseif (!empty($id3_info['id3v1']['title'])) {
-					$song_item['title'] = $id3_info['id3v1']['title'];
+					$song_item['title'] = clean_titles($id3_info['id3v1']['title']);
 				} else { 
 					$song_item['title'] = "Unknown title";
 				}		
@@ -301,6 +306,8 @@ function scan_songs() {
 				$song_item['filename'] = $id3_info['filename'];
 				$song_item['playtime_seconds'] = $id3_info['playtime_seconds'];
 				$song_item['playtime_string'] = $id3_info['playtime_string'];
+				$song_item['mtime'] = filemtime(constant("SONGS_PATH") . $file);
+				$song_item['size'] = filesize(constant("SONGS_PATH") . $file);
 				$songlist_struct[ base64_encode(rawurlencode($id3_info['filename'])) ] = $song_item;
 			
 			}

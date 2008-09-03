@@ -1,4 +1,5 @@
-<?
+<?php
+
 	require_once("opentape_common.php");
 	
 	if (!is_logged_in()) { header("Location: " . $REL_PATH . "code/login.php"); }
@@ -94,7 +95,7 @@
                     <ul class="sortie">
 <?php
     foreach ($songlist_struct as $pos => $row) { 
-        	if (! is_file( "songs/" . $row['filename']) ) {
+        	if (! is_file( constant("SONGS_PATH") . $row['filename']) ) {
 				unset($songlist_struct[$pos]);
 				continue;
 			}
