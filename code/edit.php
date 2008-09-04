@@ -7,11 +7,11 @@
 	check_cookie();
 	
 	// Don't allow users to upload non-mp3 files, seriously.
-	if (isset($_FILES['file']) || !preg_match('/mp3$/i', basename($_FILES['file']['name'])) ) {
+	if (isset($_FILES['file']) && !preg_match('/mp3$/i', basename($_FILES['file']['name'])) ) {
 	
 		$upload_success = -1;
 	
-	} elseif (isset($_FILES['file']) || preg_match('/mp3$/i', basename($_FILES['file']['name'])) ) {
+	} elseif (isset($_FILES['file']) && preg_match('/mp3$/i', basename($_FILES['file']['name'])) ) {
 		// In PHP versions earlier than 4.1.0, $HTTP_POST_FILES should be used instead
 		// of $_FILES.
 		$upload_dir = constant("SONGS_PATH");

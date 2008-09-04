@@ -269,13 +269,13 @@ function scan_songs() {
 		
 	$songlist_struct = get_songlist_struct();
 	$songlist_struct_original = $songlist_struct;
+	$songlist_new_items = array();
 	
 	// List all the files
     while (false !== ($file = readdir($dir_handle)) ) {
 
 		if ( strcmp($file, ".") && strcmp($file, "..") && !strcasecmp(end(explode(".", $file)), "mp3")) {
 
-			// Analyze file and store returned data in $ThisFileInfo
 			// error_log("Analyzing: " . constant("SONGS_PATH") . $file . " file_exists=" . file_exists(constant("SONGS_PATH") . $file));
 			// error_log("id3_structure: " . print_r($id3_info,1) . "\nID3v2:" . $id3_info['id3v2']['comments']['artist'][0] . " - " . $id3_info['id3v2']['comments']['title'][0]);
 			// error_log("ID3v1:" . $id3_info['id3v1']['artist'] . " - " . $id3_info['id3v1']['title']);
@@ -291,24 +291,34 @@ function scan_songs() {
 					$song_item['artist'] = clean_titles($id3_info['id3v2']['comments']['artist'][0]);
 				} elseif (!empty($id3_info['id3v1']['artist'])) {
 					$song_item['artist'] = clean_titles($id3_info['id3v1']['artist']);
-				} else { 
+				} /*else { 
 					$song_item['artist'] = "Unknown artist";
-				}
+				} */
 
 				if (!empty($id3_info['id3v2']['comments']['title'][0])) {
 					$song_item['title'] = clean_titles($id3_info['id3v2']['comments']['title'][0]);
 				} elseif (!empty($id3_info['id3v1']['title'])) {
 					$song_item['title'] = clean_titles($id3_info['id3v1']['title']);
-				} else { 
+				} /*else { 
 					$song_item['title'] = "Unknown title";
-				}		
-													
+				} */
+				
+				// if we are missing tags, set the title to the filename, sans ".mp3"
+				if (!isset($song_item['artist']) && !isset($song_item['title'])) {
+					$song_item['artist'] = "";
+					$song_item['title'] = preg_replace('/\.mp3$/i', $id_info['filename']);
+				} elseif (!isset($song_item['artist'])) { // fill in some of the blanks otherwise
+					$song_item['artist'] = "Unknown artist";
+				} elseif (!isset($song_item['title'])) {
+					$song_item['title'] = "Unknown track";
+				}
+									
 				$song_item['filename'] = $id3_info['filename'];
 				$song_item['playtime_seconds'] = $id3_info['playtime_seconds'];
 				$song_item['playtime_string'] = $id3_info['playtime_string'];
 				$song_item['mtime'] = filemtime(constant("SONGS_PATH") . $file);
 				$song_item['size'] = filesize(constant("SONGS_PATH") . $file);
-				$songlist_struct[ base64_encode(rawurlencode($id3_info['filename'])) ] = $song_item;
+				$songlist_new_items[ base64_encode(rawurlencode($id3_info['filename'])) ] = $song_item;
 			
 			}
 				
@@ -317,9 +327,13 @@ function scan_songs() {
     }
     
     // if changed, save it
-    if ($songlist_struct != $songlist_struct_original) {
+    if (!empty($songlist_new_items)) {
+    	
+    	$songlist_struct = array_merge($songlist_new_items, $songlist_struct);
+    
     	announce_songs($songlist_struct);
     	write_songlist_struct($songlist_struct);
+    	
     }
     
     return $songlist_struct;
