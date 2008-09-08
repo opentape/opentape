@@ -97,28 +97,26 @@ function get_base_url() {
 }
 
 function is_logged_in() {
-	
-	if ( file_exists( constant("SETTINGS_PATH") . ".opentape_session.array" ) ) {
-		$session_struct_data = file_get_contents( constant("SETTINGS_PATH") . ".opentape_session.array" );
-		$session_struct = unserialize($session_struct_data);
+
+	$session_struct = get_session_struct();
 		
-		if (is_array($session_struct)) {
-			foreach ($session_struct as $pos => $item) { 
-				if(!strcmp($_COOKIE["opentape_session"], $item['key'])) {
-					return true;
-				}
+	if (is_array($session_struct)) {
+		foreach ($session_struct as $pos => $item) { 
+			if(!strcmp($_COOKIE["opentape_session"], $item['key'])) {
+				return true;
 			}
 		}
 	}
-			
+				
 	return false;
 	
 }
 
 function check_password($password) {
-	
+
+/*	
 	$password_struct = array();
-	
+
 	if (file_exists(constant("SETTINGS_PATH") . ".opentape_password.array")) {
 		
 		$password_struct_data = file_get_contents( constant("SETTINGS_PATH") . ".opentape_password.array" );
@@ -134,7 +132,9 @@ function check_password($password) {
 	} else {
 		return -1;
 	}
-		
+*/
+
+	$password_struct = get_password_struct();		
 		
 	if (!strcmp( md5("MIXTAPESFORLIFE" . $password), $password_struct['hash']) ) {
 		return true;
@@ -145,7 +145,16 @@ function check_password($password) {
 }
 
 function is_password_set() {
+	
+	$password_struct = get_password_struct();
 
+	if (is_array($password_struct) && !empty($password_struct) && $password_struct !== false) {
+		return true;
+	} else {
+		return false;
+	}
+	
+/*
 	if (file_exists(constant("SETTINGS_PATH") . ".opentape_password.array")) {
 	
 		$password_struct_data = file_get_contents( constant("SETTINGS_PATH") . ".opentape_password.array" );
@@ -160,7 +169,27 @@ function is_password_set() {
 	} else {
 		return false;
 	}
+*/
 	
+}
+
+function set_password($password) {
+
+	$password_struct = array();
+	$password_struct['hash'] = md5("MIXTAPESFORLIFE" . $password);
+	
+	return write_password_struct($password_struct);
+	
+	/*
+	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_password.array", serialize($password_struct));
+	
+	if ($bytes_written===false) {
+		return false;
+	} else {
+		return true;
+	}
+	*/
+
 }
 
 // Here we give all users cookies, then we add/remove these session id's
@@ -181,26 +210,18 @@ function check_cookie() {
 
 function create_session() {
 	
-	$session_struct = array();
+	$session_struct = get_session_struct();
 	$session_item = array();
-	
+
+	if($session_struct===false) { $session_struct=array(); }	
+
 	if (isset($_COOKIE["opentape_session"])) {
-		
-		if (file_exists(constant("SETTINGS_PATH") . ".opentape_session.array" )) {
-			$session_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . ".opentape_session.array" );
-			$session_struct = unserialize($session_struct_data); 
-		}
-		
+
 		$session_item['key'] = $_COOKIE["opentape_session"];
 		$session_item['ts'] = time();
-		array_push($session_struct,$session_item);
-			
-		$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_session.array", serialize($session_struct));
-		if ($bytes_written===false) {
-			return -1;
-		}
-			
-		return true;	
+		array_push($session_struct, $session_item);
+						
+		return write_session_struct($session_struct);	
 	
 	} else {
 	
@@ -212,14 +233,11 @@ function create_session() {
 
 function remove_session() {
 
-	$session_struct = array();
+	$session_struct = get_session_struct();
 	$session_struct_new = array();
 	$session_item = array();
 	
-	if ( file_exists(constant("SETTINGS_PATH") . ".opentape_session.array" ) ) {
-	
-		$session_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . ".opentape_session.array" );
-		$session_struct = unserialize($session_struct_data); 
+	if (is_array($session_struct)) {
 	
 		// rewrite the session struct without the one we are removing
 		foreach ($session_struct as $pos => $item) { 
@@ -230,10 +248,7 @@ function remove_session() {
 		
 		}
 		
-		$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_session.array", serialize($session_struct_new));
-		if ($bytes_written===false) {
-			return -1;
-		}
+		return write_session_struct($session_struct_new);
 					
 	} else {
 		// if the session file doesn't exist, there's nothing to remove the session from
@@ -244,19 +259,7 @@ function remove_session() {
 
 }
 
-function set_password($password) {
 
-	$password_struct = array();
-	$password_struct['hash'] = md5("MIXTAPESFORLIFE" . $password);
-	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_password.array", serialize($password_struct));
-	
-	if ($bytes_written===false) {
-		return false;
-	} else {
-		return true;
-	}
-
-}
 
 function scan_songs() {
 
@@ -436,23 +439,33 @@ function get_total_runtime_string() {
 function get_songlist_struct() {
 
 	$songlist_struct = array();
+	$filename_base = ".opentape_songlist";
 	
-	if (file_exists( constant("SETTINGS_PATH") . ".opentape_songlist.array" ) ) {
+	if (file_exists( constant("SETTINGS_PATH") . $filename_base . ".php" ) &&
+		is_readable( constant("SETTINGS_PATH") . $filename_base . ".php" )  ) {
 	
-		$songlist_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . ".opentape_songlist.array" );
+		// this is the more secure way of storing this data, as 
+		// the web users can't fetch it
+		include( constant("SETTINGS_PATH") . $filename_base . ".php" );
+		$songlist_struct = unserialize(base64_decode($songlist_struct_data));
+	
+	} elseif (file_exists( constant("SETTINGS_PATH") . $filename_base . ".array" ) &&
+			is_readable( constant("SETTINGS_PATH") . $filename_base . ".array" )  ) {
+
+		$songlist_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . $filename_base .".array" );
 		$songlist_struct = unserialize($songlist_struct_data); 
 
 		if ($songlist_struct === false || !is_array($songlist_struct)) {
 			error_log ("Songlist currently empty");
 			$songlist_struct = array();
-			return $songlist_struct;
 		} else {
-			return $songlist_struct;
+			// upgrade to the new method of storing the data quietly
+			write_songlist_struct($songlist_struct);	
 		}
 		
-	} else {
-		return $songlist_struct;
 	}
+
+	return $songlist_struct;
 	
 }
 
@@ -467,10 +480,12 @@ function write_songlist_struct($songlist_struct) {
 		}
 	}
 	
-	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_songlist.array", serialize($songlist_struct));
+	$songlist_struct_data = '<?php $songlist_struct_data = "' . base64_encode(serialize($songlist_struct)) . '"; ?>';
+	
+	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_songlist.php", $songlist_struct_data);
 	if ($bytes_written===false) {
 		error_log("Unable to write songlist array");
-		return -1;
+		return false;
 	} else {
 		return true;	
 	}
@@ -480,36 +495,145 @@ function write_songlist_struct($songlist_struct) {
 function get_opentape_prefs() {
 
 	$prefs_struct = array();
+	$filename_base = ".opentape_prefs";
+
+	if (file_exists( constant("SETTINGS_PATH") . $filename_base . ".php" ) &&
+		is_readable( constant("SETTINGS_PATH") . $filename_base . ".php" )  ) {
 	
-	if (file_exists( constant("SETTINGS_PATH") . ".opentape_prefs.array" ) ) {
+		// this is the more secure way of storing this data, as 
+		// the web users can't fetch it
+		include( constant("SETTINGS_PATH") . $filename_base . ".php" );
+		$prefs_struct = unserialize(base64_decode($prefs_struct_data));
+
+	} elseif (file_exists( constant("SETTINGS_PATH") . $filename_base . ".array" ) &&
+			is_readable( constant("SETTINGS_PATH") . $filename_base . ".array" )  ) {
 	
-		$prefs_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . ".opentape_prefs.array" );
+		$prefs_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . $filename_base . ".array" );
 		$prefs_struct = unserialize($prefs_struct_data); 
 
 		if ($prefs_struct === false || !is_array($prefs_struct)) {
-			error_log ("prefs currently empty");
+			error_log ("prefs file currently empty");
 			$prefs_struct = array();
-			return $prefs_struct;
 		} else {
-			return $prefs_struct;
+			// we need to upgrade the file type to the new version by writing it over again here.
+			write_opentape_prefs($prefs_struct);
 		}
 		
-	} else {
-		return $prefs_struct;
 	}
+
+	return $prefs_struct;
 
 }
 
 function write_opentape_prefs($prefs_struct) {
 
-	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_prefs.array", serialize($prefs_struct));
+	$prefs_struct_data = '<?php $prefs_struct_data = "' . base64_encode(serialize($prefs_struct)) . '"; ?>';
+
+	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_prefs.php", $prefs_struct_data);
 	if ($bytes_written===false) {
-		error_log("Unable to write prefs array");
-		return -1;
+		error_log("Unable to write prefs php data in " . constant("SETTINGS_PATH") . ".opentape_prefs.php");
+		return false;
 	} else {
 		return true;	
 	}
 
+
+}
+
+function get_password_struct() {
+
+	$password_struct = array();
+	$filename_base = ".opentape_password";
+
+	if (file_exists( constant("SETTINGS_PATH") . $filename_base . ".php" ) &&
+		is_readable( constant("SETTINGS_PATH") . $filename_base .".php" )  ) {
+		// this is the more secure way of storing this data, as 
+		// the web users can't fetch it
+		include( constant("SETTINGS_PATH") . $filename_base . ".php" );
+		$password_struct = unserialize(base64_decode($password_struct_data));
+
+	} elseif (file_exists( constant("SETTINGS_PATH") . $filename_base . ".array" ) &&
+			is_readable( constant("SETTINGS_PATH") . $filename_base . ".array" )  ) {
+	
+		$password_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . $filename_base . ".array" );
+		$password_struct = unserialize($password_struct_data); 
+
+		if ($password_struct === false || !is_array($password_struct)) {
+			error_log ("password file currently empty");
+			$password_struct = array();
+		} else {
+			// we need to upgrade the file type to the new version by writing it over again here.
+			write_password_struct($password_struct);
+		}
+		
+	} else {
+		return false;
+	}
+
+	return $password_struct;
+
+}
+
+function write_password_struct($password_struct) {
+
+	$password_struct_data = '<?php $password_struct_data = "' . base64_encode(serialize($password_struct)) . '"; ?>';
+
+	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_password.php", $password_struct_data);
+	if ($bytes_written===false) {
+		error_log("Unable to write password php data in " . constant("SETTINGS_PATH") . ".opentape_password.php");
+		return false;
+	} else {
+		return true;	
+	}
+
+}
+
+function get_session_struct() {
+
+	$session_struct = array();
+	$filename_base = ".opentape_session";
+
+	if (file_exists( constant("SETTINGS_PATH") . $filename_base . ".php" ) &&
+		is_readable( constant("SETTINGS_PATH") . $filename_base . ".php" )  ) {
+		
+		// this is the more secure way of storing this data, as 
+		// the web users can't fetch it
+		include( constant("SETTINGS_PATH") . $filename_base . ".php" );
+		$session_struct = unserialize(base64_decode($session_struct_data));
+
+	} elseif (file_exists( constant("SETTINGS_PATH") . $filename_base . ".array" ) &&
+			is_readable( constant("SETTINGS_PATH") . $filename_base . ".array" )  ) {
+	
+		$session_struct_data = file_get_contents  ( constant("SETTINGS_PATH") . $filename_base . ".array" );
+		$session_struct = unserialize($session_struct_data); 
+
+		if ($session_struct === false || !is_array($session_struct)) {
+			error_log ("password file currently empty");
+			$session_struct = array();
+		} else {
+			// we need to upgrade the file type to the new version by writing it over again here.
+			write_session_struct($session_struct);
+		}
+		
+	} else {
+		return false;
+	}
+
+	return $session_struct;
+
+}
+
+function write_session_struct($session_struct) {
+
+	$session_struct_data = '<?php $session_struct_data = "' . base64_encode(serialize($session_struct)) . '"; ?>';
+
+	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_session.php", $session_struct_data);
+	if ($bytes_written===false) {
+		error_log("Unable to write session php data in " . constant("SETTINGS_PATH") . ".opentape_session.php");
+		return false;
+	} else {
+		return true;	
+	}
 
 }
 
