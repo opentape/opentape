@@ -14,7 +14,7 @@
 		include ("code/warning.php");
 	
 	// If no password is set, show password creation screen
-	} elseif ( file_exists ('settings/.opentape_password.array') === false || filesize ('settings/.opentape_password.array') == 0) {
+	} elseif ( file_exists ('settings/.opentape_password.php') === false || filesize ('settings/.opentape_password.php') == 0) {
 		include ("code/welcome.php");
 	
 	// otherwise, all is well!

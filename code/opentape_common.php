@@ -19,10 +19,13 @@ $REL_PATH = preg_replace('|code/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|res/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|/[^/]+?$|', '/', $REL_PATH);
 $REL_PATH = preg_replace('|/+|', '/', $REL_PATH);
-define("VERSION", "0.1");
+define("VERSION", "0.11");
 define("VERSION_CHECK_URL", "http://opentape.fm/public/latest_version.php");
 define("ANNOUNCE_SONGS_URL", "http://opentape.fm/public/announce_songs.php");
 define("ANNOUNCE_JS_URL", "http://opentape.fm/public/announce.js");
+
+// this may fix certain win32 issues, thanks fusen
+define("GETID3_HELPERAPPSDIR", "/");
 
 // Change dir to the main install dir for consistency
 $cwd = getcwd();

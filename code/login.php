@@ -91,7 +91,7 @@
 	
 	<?php
 		// say that this is a bad password
-		if($status_msg) {
+		if(isset($status_msg)) {
 	?>
 		<script type="text/javascript">
 			var fader = new StatusFader();

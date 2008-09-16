@@ -133,21 +133,21 @@
 		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/upload.js"></script>
 
 		<?php
-			if($upload_success==1 && isset($_FILES['file'])) {
+			if(isset($upload_success) && $upload_success==1 && isset($_FILES['file'])) {
 		?>
 			<script type="text/javascript">
 				var fader = new StatusFader();
 				fader.stay("Upload OK!", '#008000');
 			</script>
 		<?php
-			} elseif($upload_success==0 && isset($_FILES['file'])) {
+			} elseif(isset($upload_success) && $upload_success==0 && isset($_FILES['file'])) {
 		?>
 			<script type="text/javascript">
 				var fader = new StatusFader();
 				fader.stay("Upload failed.", '#ff0000');
 			</script>
 		<?php
-			} elseif($upload_success==-1 && isset($_FILES['file'])) {
+			} elseif(isset($upload_success) && $upload_success==-1 && isset($_FILES['file'])) {
 		?>
 			<script type="text/javascript">
 				var fader = new StatusFader();

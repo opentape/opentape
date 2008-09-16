@@ -84,7 +84,7 @@
 				?>
 			</div>
 
-			<?php if ($prefs_struct['display_mp3']==1) { ?>
+			<?php if (isset($prefs_struct['display_mp3']) && $prefs_struct['display_mp3']==1) { ?>
 			<a class="mp3" href="<?php echo $REL_PATH . constant("SONGS_PATH") . rawurlencode($row['filename']); ?>" target="_blank">MP3</a>
 			<?php } else { ?>
 			&nbsp;

@@ -1,0 +1,24 @@
+
+Welcome to Opentape. We are liberating taste.
+
+* INSTALL *
+
+1. Upload the unzipped files and folders into a folder on your website
+2. Open http://yourwebsite.com/that_directory/
+3. Create a password when requested, upload songs.
+
+You may receive a warning about the songs/ and settings/ folders not being writeable. Check with your webhost about how to make them writeable by the web server. This is required for Opentape to work.
+
+More details on the forum: http://opentape.fm/forum/
+
+* LICENSING *
+
+Opentape is licensed under GNU GPL v3.  Please see the LICENSE file for the full license.
+
+Opentape contains code from other projects, that code is licensed as follows:
+mootools - MIT License: http://www.opensource.org/licenses/mit-license.php
+getid3 - GNU GPL: http://getid3.sourceforge.net/source/license.txt
+SWFObject - MIT License: http://www.opensource.org/licenses/mit-license.php
+Services_JSON - BSD License: http://www.opensource.org/licenses/bsd-license.php
+JW Player - CC Attribution-Noncommercial-Share Alike 3.0 Unported: http://creativecommons.org/licenses/by-nc-sa/3.0/ 
+
