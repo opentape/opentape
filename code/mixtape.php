@@ -140,8 +140,11 @@
 		
 				trackEntry.addEvent('click',function(e) {
 						targ = e.target || e.srcElement;
-						if(targ.tagName == 'LI') { togglePlayback(targ.id); }
-						else if(targ.tagName != 'A') { togglePlayback(targ.parentNode.id); }		 
+						// because of the numerous subelements one can click, we need to do this ugly thing
+						if (targ.id.indexOf("song")!=-1) { togglePlayback(targ.id); }
+						else if (targ.parentNode.id.indexOf("song")!=-1) { togglePlayback(targ.parentNode.id); }
+						else if (targ.parentNode.parentNode.id.indexOf("song")!=-1) { togglePlayback(targ.parentNode.parentNode.id); }
+						else if (targ.parentNode.parentNode.parentNode.id.indexOf("song")!=-1) { togglePlayback(targ.parentNode.parentNode.parentNode.id); }
 				});
 				
 				
@@ -161,6 +164,7 @@
 			var version = obj['version'];
 			var client = obj['client'];
 			isReady = 1;
+			sendEvent('ITEM',currentTrack); // sets the playback to item 0
 			player = document.getElementById(id);
 			player.addModelListener('STATE','updatePlayerState');
 			player.addModelListener('TIME','updateCurrentPos');
