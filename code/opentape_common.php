@@ -19,7 +19,7 @@ $REL_PATH = preg_replace('|code/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|res/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|/[^/]+?$|', '/', $REL_PATH);
 $REL_PATH = preg_replace('|/+|', '/', $REL_PATH);
-define("VERSION", "0.11");
+define("VERSION", "0.12");
 define("VERSION_CHECK_URL", "http://opentape.fm/public/latest_version.php");
 define("ANNOUNCE_SONGS_URL", "http://opentape.fm/public/announce_songs.php");
 define("ANNOUNCE_JS_URL", "http://opentape.fm/public/announce.js");
@@ -312,7 +312,7 @@ function scan_songs() {
 				// if we are missing tags, set the title to the filename, sans ".mp3"
 				if (!isset($song_item['artist']) && !isset($song_item['title'])) {
 					$song_item['artist'] = "";
-					$song_item['title'] = preg_replace('/\.mp3$/i', $id_info['filename']);
+					$song_item['title'] = preg_replace('/\.mp3$/i', '', $id_info['filename']);
 				} elseif (!isset($song_item['artist'])) { // fill in some of the blanks otherwise
 					$song_item['artist'] = "Unknown artist";
 				} elseif (!isset($song_item['title'])) {
@@ -349,7 +349,7 @@ function scan_songs() {
 // Renames songs in the songlist structure
 function rename_song($song_key, $artist, $title) {
 	
-	if (empty($song_key) || empty($artist) || empty($title)) { 
+	if (empty($song_key)) { 
 		error_log("rename_song called with insufficient arguments: song_key=$song_key, artist=$artist, title=$title");
 		return false; 
 	}

@@ -60,7 +60,6 @@
  * Marker constant for Services_JSON::decode(), used to flag stack state
  */
 define('SERVICES_JSON_SLICE',   1);
-
 /**
  * Marker constant for Services_JSON::decode(), used to flag stack state
  */

@@ -103,8 +103,8 @@
                         <li id="<?php echo $pos; ?>">
                             <div class="name">
                                 <span class="original_artist"><?php
-					       if (isset($row['opentape_artist'])) { echo $row['opentape_artist']; } 
-					       else { echo $row['artist']; } 
+					       if (isset($row['opentape_artist']) && !empty($row['opentape_artist'])) { echo $row['opentape_artist']; } 
+					elseif (!isset($row['opentape_artist']) && isset($row['artist'])) { echo $row['artist']; }
 				        ?></span> - <span class="original_title"><?php
 					   if (isset($row['opentape_title'])) { echo $row['opentape_title']; } 
 					   else { echo $row['title']; } 

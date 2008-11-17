@@ -1,4 +1,4 @@
-<?
+<?php
 	
 	require_once("opentape_common.php");
 
@@ -6,7 +6,8 @@
 	
 	$songlist_struct = scan_songs();
 	$songlist_struct_original = $songlist_struct;
-	
+	$songlist_hash= md5(serialize($songlist_struct));
+
 	$prefs_struct = get_opentape_prefs();
 
 ?>
@@ -35,7 +36,7 @@
 				type: "xml",
 				shuffle: "false",
 				repeat: "list",
-				file: "<?php echo get_base_url(); ?>code/xspf.php"		
+				file: "<?php echo get_base_url(); ?>code/xspf.php<?php echo "?" . $songlist_hash; ?>"		
 			}
 			var params = {
 				allowscriptaccess: "always"
@@ -76,9 +77,9 @@
 			<li class="song" id="song<?php echo $i; ?>">
 			<div class="name">
 				<?php
-					if (isset($row['opentape_artist'])) { echo $row['opentape_artist']; } 
-					else { echo $row['artist']; } 
-				?> - <?php 
+					if (isset($row['opentape_artist']) && !empty($row['opentape_artist'])) { echo $row['opentape_artist'] . " - "; } 
+					elseif (!isset($row['opentape_artist']) && isset($row['artist'])) { echo $row['artist'] . " - "; } 
+					
 					if (isset($row['opentape_title'])) { echo $row['opentape_title']; }
 					else { echo $row['title']; }
 				?>
@@ -242,7 +243,8 @@
 		function togglePlayback(id) {
 			id = id.replace(/song/,'');
 			songClock = $E('#song'+currentTrack+' .clock');
-			//console.log("togglePlayback called with: " + id + " currentTrack is: " + currentTrack);
+			// songItem = $E('#song'+currentTrack); 
+			// console.log("togglePlayback called with: " + id + " currentTrack is: " + currentTrack);
 			
 			if (id == currentTrack || id == null) { 
 				if(playerStatus == "PAUSED"|| playerStatus=="IDLE") {
@@ -275,7 +277,7 @@
 				
 	</body>
 </html>
-<?
+<?php
 
 	if ($songlist_struct != $songlist_struct_original) {
     	write_songlist_struct($songlist_struct);
