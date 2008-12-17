@@ -44,7 +44,7 @@ $location = $doc->createElement('location');
 $location->appendChild( $doc->createTextNode(get_base_url() . 'code/xspf.php') );
 $root->appendChild($location);
 
-$tracklist = $doc->createElement('tracklist');
+$tracklist = $doc->createElement('trackList');
 $root->appendChild($tracklist);
 
 foreach ($songlist_struct as $pos => $row) { 
@@ -72,8 +72,8 @@ foreach ($songlist_struct as $pos => $row) {
 	$trackitem->appendChild($creator);
 
 	$title = $doc->createElement('title');
-	if (isset($row['opentape_title'])) { $creator->appendChild( $doc->createTextNode( $row['opentape_title'] )); }
-	else { $creator->appendChild( $doc->createTextNode( $row['title'] )); }
+	if (isset($row['opentape_title'])) { $title->appendChild( $doc->createTextNode( $row['opentape_title'] )); }
+	else { $title->appendChild( $doc->createTextNode( $row['title'] )); }
 	$trackitem->appendChild($title);
 
 	$duration = $doc->createElement('duration');

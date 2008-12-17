@@ -165,7 +165,10 @@
 			var version = obj['version'];
 			var client = obj['client'];
 			isReady = 1;
+
 			sendEvent('ITEM',currentTrack); // sets the playback to item 0
+			sendEvent('STOP');
+
 			player = document.getElementById(id);
 			player.addModelListener('STATE','updatePlayerState');
 			player.addModelListener('TIME','updateCurrentPos');
@@ -243,7 +246,7 @@
 		function togglePlayback(id) {
 			id = id.replace(/song/,'');
 			songClock = $E('#song'+currentTrack+' .clock');
-			// songItem = $E('#song'+currentTrack); 
+			songItem = $E('#song'+currentTrack); 
 			// console.log("togglePlayback called with: " + id + " currentTrack is: " + currentTrack);
 			
 			if (id == currentTrack || id == null) { 
