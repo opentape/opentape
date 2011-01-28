@@ -19,7 +19,7 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-	<title><?php if(!empty($prefs_struct['banner'])) { echo $prefs_struct['banner']; } else { echo "Opentape / " . count($songlist_struct) . " songs, " . get_total_runtime_string(); } ?></title>
+	<title><?php if(!empty($prefs_struct['banner'])) { echo strip_tags($prefs_struct['banner']); } else { echo "Opentape / " . count($songlist_struct) . " songs, " . get_total_runtime_string(); } ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $REL_PATH; ?>res/tape.css" />
@@ -166,10 +166,11 @@
 			var client = obj['client'];
 			isReady = 1;
 
-			sendEvent('ITEM',currentTrack); // sets the playback to item 0
-			sendEvent('STOP');
+			//sendEvent('ITEM',currentTrack); // sets the playback to item 0
+			//sendEvent('STOP');
 
-			player = document.getElementById(id);
+			//player = document.getElementById(id);
+			player = document.getElementById('openplayer'); // have to hardcode this because linux/flash screws this up
 			player.addModelListener('STATE','updatePlayerState');
 			player.addModelListener('TIME','updateCurrentPos');
 			player.addControllerListener('ITEM','updateCurrentTrack');
@@ -240,7 +241,7 @@
 			songItem.addClass('hilite');
 						
 			var name = $E('#song'+ id +' .name').getHTML().replace('&amp;','&');
-			document.title = name.trim() + " / <?php if(!empty($prefs_struct['banner'])) { echo escape_for_json($prefs_struct['banner']); } else { echo "OPENTAPE"; } ?>";		
+			document.title = name.trim() + " / <?php if(!empty($prefs_struct['banner'])) { echo escape_for_json(strip_tags($prefs_struct['banner'])); } else { echo "OPENTAPE"; } ?>";		
 		}
 	
 		function togglePlayback(id) {

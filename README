@@ -11,9 +11,13 @@ You may receive a warning about the songs/ and settings/ folders not being write
 
 More details on the forum: http://opentape.fm/forum/
 
+* CHANGES IN THIS RELEASE *
+
+Please see http://news.opentape.fm/ for a list of updates in this release
+
 * LICENSING *
 
-Opentape is licensed under GNU GPL v3.  Please see the LICENSE file for the full license.
+Opentape is (as of version 0.12) licensed under GNU Affero GPL v3.  Please see the LICENSE file for the full license.
 
 Opentape contains code from other projects, that code is licensed as follows:
 mootools - MIT License: http://www.opensource.org/licenses/mit-license.php
