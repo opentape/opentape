@@ -22,7 +22,6 @@ Opentape is (as of version 0.12) licensed under GNU Affero GPL v3.  Please see t
 Opentape contains code from other projects, that code is licensed as follows:
 mootools - MIT License: http://www.opensource.org/licenses/mit-license.php
 getid3 - GNU GPL: http://getid3.sourceforge.net/source/license.txt
-SWFObject - MIT License: http://www.opensource.org/licenses/mit-license.php
 Services_JSON - BSD License: http://www.opensource.org/licenses/bsd-license.php
+Soundmanager 2 - BSD License: http://www.schillmania.com/projects/soundmanager2/license.txt
 JW Player - CC Attribution-Noncommercial-Share Alike 3.0 Unported: http://creativecommons.org/licenses/by-nc-sa/3.0/ 
-
