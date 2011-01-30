@@ -50,11 +50,9 @@
 				<div class="flag">
 					<h1><?php echo $banner_header_text; ?></h1>
 					<h2><?php echo $banner_caption_text; ?></h2>
-					
 				</div>
 			</div>
-										
-						
+				
 			<ul class="songs">
 <?php
 		
@@ -110,20 +108,17 @@
 		
 	<script type="text/javascript">
 		
-		var openPlaylist=new Array();
+		var openPlaylist=new Array(); // build track array
 		openPlaylist.push(<?php
 			$list_str = "";
-			foreach ($songlist_struct as $pos => $row) { 
-				//$list_str .= "'" . preg_replace('/=/', '', $pos) . "',";				
-				$list_str .= "'" . $pos . "',";				
-			}
+			foreach ($songlist_struct as $pos => $row) { $list_str .= "'" . $pos . "',"; }
 			$list_str = preg_replace('/,$/','',$list_str);
 			echo $list_str;
 			?>);
 
         var pageTitle = "<?php if(!empty($prefs_struct['banner'])) { echo escape_for_json(strip_tags($prefs_struct['banner'])); } else { echo "OPENTAPE"; } ?>";
             
-        event_init();
+        event_init(); // bind events where needed
 
 	</script>
 				

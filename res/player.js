@@ -190,11 +190,13 @@ var Base64 = {
 
 function togglePlayback(id) {
 
-	id = id.replace(/song/,'');
-	songClock = $$('#song'+currentTrack+' .clock');
-	songItem = $('song'+currentTrack); 
+	id = parseInt(id.replace(/song/,''));
 	
 	if (id == currentTrack && typeof(currentTrack)!='undefined') { 
+	
+		songClock = $$('#song'+currentTrack+' .clock');
+    	songItem = $('song'+currentTrack); 
+	
 		if(playerStatus == "PAUSED") {
 			songClock.removeClass('grey');
 			songClock.addClass('green');
@@ -240,6 +242,7 @@ function playTrack() {
 function nextTrack() {
 	
 	if (openPlaylist[(currentTrack+1)]) {
+	    cleanTrackDisplay(currentTrack);
 		currentTrack++; 
 		playTrack(); 
 		return true;
@@ -250,12 +253,14 @@ function nextTrack() {
 }
 
 function cleanTrackDisplay(id) {
+
     if (typeof(id)=='undefined') { return false; }
 	songClock = $$('#song'+id+' .clock');
 	songItem = $('song'+id);
 
 	songItem.removeClass('hilite');		
 	songClock.set('html','');
+	
 }
 
 function setupTrackDisplay(id) {
@@ -283,7 +288,7 @@ function sm_onplay() { 	playerStatus = "PLAYING"; document.title = document.titl
 
 function sm_onpause() {	playerStatus = "PAUSED"; document.title = document.title.replace(/\u25BA/, '\u25FC'); }
 
-function sm_onfinish() { nextTrack(); }
+function sm_onfinish() { debug("sm_onfinish fired"); nextTrack(); }
 
 function sm_whileplaying() {
 	

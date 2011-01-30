@@ -1,0 +1,5 @@
+*.mp3
+.htaccess
+.htpasswd
+settings/*.array
+settings/*.php
