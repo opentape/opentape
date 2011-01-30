@@ -21,7 +21,7 @@ var StatusFader = new Class({
 				this.el.setStyle('color',this.colors['good']);
 				this.el.setStyle('padding','6px');
 				this.el.setStyle('width','150px');
-				this.fx.start({'opacity':[1,0]});
+				this.fx.start({ 'opacity': [1,0] });
 			break;	
 			case 'failure':
 				this.el.setStyle('color',this.colors['bad']);

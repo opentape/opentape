@@ -1,14 +1,13 @@
 <?php
 
 	require_once ('opentape_common.php');
-	require_once ('JSON.php');
 
 	$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
 	
 	$command = $_POST['command'];
 	$args = $json->decode(stripslashes($_POST['args']));
 	
-	header("Content-type: text/javascript; charset=UTF-8");
+	header("Content-type: application/json; charset=UTF-8");
 	
 	// create_password is the exception, since you can't be logged in
 	if (!is_logged_in() && strcmp($command, "create_password") ) {

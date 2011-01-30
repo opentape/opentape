@@ -47,6 +47,12 @@
 		<title>Opentape / Edit Mixtape</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" type="text/css" href="<?php echo $REL_PATH; ?>res/style.css" />
+		
+		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-core-1.3-yc.js"></script>
+		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-more-1.3-yc.js"></script>
+		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/statusfader.js"></script>
+		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/upload.js"></script>
+		
 	</head>
 	<body>
 		<div class="container">
@@ -127,10 +133,7 @@
 		</div>	
     </div>
 </div>
-		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-1.2-core-yc.js"></script>
-		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-1.2-more-yc.js"></script>
-		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/statusfader.js"></script>
-		<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/upload.js"></script>
+
 
 		<?php
 			if(isset($upload_success) && $upload_success==1 && isset($_FILES['file'])) {
@@ -213,7 +216,7 @@
 				var key = li.getProperty('id');
 				li.addClass('hover');			
 				li.getElement('div.name').setStyle('display','none');
-				if(Browser.Engine.webkit || Browser.Engine.trident) li.getElement('.inputs').setStyle('padding-top','9px');
+				if(Browser.safari || Browser.chrome || Browser.ie) li.getElement('.inputs').setStyle('padding-top','9px');
 				li.getElement('div.inputs').setStyle('display','block');
 			}
 			

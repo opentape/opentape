@@ -9,9 +9,13 @@
 	$songlist_hash= md5(serialize($songlist_struct));
 
 	$prefs_struct = get_opentape_prefs();
+	
+	if(!empty($prefs_struct['banner'])) { $page_title = strip_tags($prefs_struct['banner']); } else { $page_title = "Opentape / " . count($songlist_struct) . " songs, " . get_total_runtime_string(); }
+	if(!empty($prefs_struct['color'])) { $header_bg_color = $prefs_struct['color']; } else { $header_bg_color = constant("DEFAULT_COLOR"); }
+	if(!empty($prefs_struct['banner'])) { $banner_header_text = $prefs_struct['banner']; } else { $banner_header_text = "OPENTAPE"; }
+	if(!empty($prefs_struct['caption'])) { $banner_caption_text = $prefs_struct['caption']; } else { $banner_caption_text = count($songlist_struct) . " songs, " . get_total_runtime_string(); }
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--
 
 	Liberating taste.
@@ -19,44 +23,33 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-	<title><?php if(!empty($prefs_struct['banner'])) { echo strip_tags($prefs_struct['banner']); } else { echo "Opentape / " . count($songlist_struct) . " songs, " . get_total_runtime_string(); } ?></title>
+	<title><?php echo $page_title; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $REL_PATH; ?>res/tape.css" />
 	<link rel="alternate" type="application/rss+xml" href="<?php echo $REL_PATH; ?>code/rss.php" />
 	<style type="text/css">
-		div.banner { background: #<?php if(!empty($prefs_struct['color'])) { echo $prefs_struct['color']; } else { echo constant("DEFAULT_COLOR"); } ?>; }									
+		div.banner { background: #<?php echo $header_bg_color; ?>; }									
 	</style>
 		
-	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools.js"></script>
-	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/swfobject.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-core-1.3-yc.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-more-1.3-yc.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/soundmanager2-jsmin.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/player.js"></script>
+
 	<script type="text/javascript">
-		if(!navigator.userAgent.match(/iPhone|iPod/i)) {			
-			var flashvars = {
-				type: "xml",
-				shuffle: "false",
-				repeat: "list",
-				file: "<?php echo get_base_url(); ?>code/xspf.php<?php echo "?" . $songlist_hash; ?>"		
-			}
-			var params = {
-				allowscriptaccess: "always"
-			}
-			var attributes = {
-			  id: "openplayer",
-			  name: "openplayer",
-			  styleclass: "flash_player"
-			}
-			swfobject.embedSWF('<?php echo get_base_url(); ?>res/mediaplayer.swf', "openplayer", "0", "0", "8.0.0", false, flashvars, params, attributes);
-		}
-	 </script>
+        soundManager.debugMode = false;
+        soundManager.url = 'res/';
+        if(Browser.Platform.ios) { soundManager.useHTML5Audio = true; }
+	</script>
 	</head>
 	
 	<body>
 		<div class="container">
 			<div class="banner">
 				<div class="flag">
-					<h1><?php if(!empty($prefs_struct['banner'])) { echo $prefs_struct['banner']; } else { echo "OPENTAPE"; } ?></h1>
-					<h2><?php if(!empty($prefs_struct['caption'])) { echo $prefs_struct['caption']; } else { echo count($songlist_struct); ?> songs, <?php echo get_total_runtime_string(); } ?></h2>
+					<h1><?php echo $banner_header_text; ?></h1>
+					<h2><?php echo $banner_caption_text; ?></h2>
 					
 				</div>
 			</div>
@@ -67,7 +60,7 @@
 		
 		$i = 0;
         foreach ($songlist_struct as $pos => $row) { 
-        
+
         	if (! is_file( constant("SONGS_PATH") . $row['filename']) ) {
 				unset($songlist_struct[$pos]);
 				continue;
@@ -101,6 +94,10 @@
 			$i++;
 	
 		}
+		
+    	if ($songlist_struct != $songlist_struct_original) { // a song in the db went missing!
+        	write_songlist_struct($songlist_struct);
+        }
 	
 ?>
 	</ul>				
@@ -108,9 +105,7 @@
 		<div class="footer">
 			<?php get_version_banner(); ?> &infin; <a href="<?php echo $REL_PATH; ?>code/edit.php">Admin</a>
 		</div>
-		
-		<div id="openplayer" class="flash_player"></div>
-		
+				
 		</div>
 		
 	<script type="text/javascript">
@@ -119,172 +114,18 @@
 		openPlaylist.push(<?php
 			$list_str = "";
 			foreach ($songlist_struct as $pos => $row) { 
-				$list_str .= "'" . preg_replace('/=/', '', $pos) . "',";				
+				//$list_str .= "'" . preg_replace('/=/', '', $pos) . "',";				
+				$list_str .= "'" . $pos . "',";				
 			}
 			$list_str = preg_replace('/,$/','',$list_str);
 			echo $list_str;
 			?>);
-			
-		// assign all the right events
-		for(i = 0; i < openPlaylist.length; i++) {
-			var trackEntry = $('song'+i);
-			if(trackEntry) {
-			
-				trackEntry.addEvent('mouseover',function() {
-					trackEntry.addClass('hover');
-				});
-				
-				trackEntry.addEvent('mouseout',function() {
-					trackEntry.removeClass('hover');
-				});
-				
-		
-				trackEntry.addEvent('click',function(e) {
-						targ = e.target || e.srcElement;
-						// because of the numerous subelements one can click, we need to do this ugly thing
-						if (targ.id.indexOf("song")!=-1) { togglePlayback(targ.id); }
-						else if (targ.parentNode.id.indexOf("song")!=-1) { togglePlayback(targ.parentNode.id); }
-						else if (targ.parentNode.parentNode.id.indexOf("song")!=-1) { togglePlayback(targ.parentNode.parentNode.id); }
-						else if (targ.parentNode.parentNode.parentNode.id.indexOf("song")!=-1) { togglePlayback(targ.parentNode.parentNode.parentNode.id); }
-				});
-				
-				
-			}
-		}	
-	
-		// Player management code //
-	
-		var currentTrack = 0;
-		var isReady = 0;
-		var playerStatus = "";
-		var currentPos;
-		var player;
-		
-		function playerReady(obj) {
-			var id = obj['id'];
-			var version = obj['version'];
-			var client = obj['client'];
-			isReady = 1;
 
-			//sendEvent('ITEM',currentTrack); // sets the playback to item 0
-			//sendEvent('STOP');
+        var pageTitle = "<?php if(!empty($prefs_struct['banner'])) { echo escape_for_json(strip_tags($prefs_struct['banner'])); } else { echo "OPENTAPE"; } ?>";
+            
+        event_init();
 
-			//player = document.getElementById(id);
-			player = document.getElementById('openplayer'); // have to hardcode this because linux/flash screws this up
-			player.addModelListener('STATE','updatePlayerState');
-			player.addModelListener('TIME','updateCurrentPos');
-			player.addControllerListener('ITEM','updateCurrentTrack');
-		}
-		
-		function updatePlayerState(obj) {
-			playerStatus = obj['newstate'];
-			//console.log("status: " + obj['newstate'] + " currentTrack: " + currentTrack);
-		}
-		
-		
-		function updateCurrentTrack(obj) {
-			cleanTrackDisplay(currentTrack);
-			currentTrack = obj['index'];
-			setupTrackDisplay(obj['index']);
-			//console.log("currentTrack changed to: " + obj['index']);
-		}
-
-		
-		function updateCurrentPos(obj) {
-			pos = Math.round(obj['position']);
-			if ( pos==currentPos ) { return false; }
-			else {
-				var string = '';
-				var sec = pos % 60;
-				var min = (pos - sec) / 60;
-				var min_formatted = min ? min+':' : '';
-				var sec_formatted = min ? (sec < 10 ? '0'+sec : sec) : sec;
-				string = min_formatted + sec_formatted;
-			
-				songClock.setHTML(string);
-				currentPos = pos;
-			}
-		
-		}
-		
-		function playTrack() {
-				//console.log("Executing playTrack: " + currentTrack);
-				setupTrackDisplay(currentTrack);
-				sendEvent('ITEM',currentTrack);
-				sendEvent('PLAY',true);
-		}
-	
-		function stopTrack() {
-			sendEvent('STOP');
-			cleanTrackDisplay(currentTrack);
-		}
-		
-		function cleanTrackDisplay(id) {
-			//console.log("Executing cleanTrackDisplay: " + id);
-
-			songClock = $E('#song'+id+' .clock');
-			songItem = $E('#song'+id);
-
-			songItem.removeClass('hilite');		
-			songClock.setHTML('');
-		}
-		
-		function setupTrackDisplay(id) {
-			//console.log("Executing setupTrackDisplay: " + id);
-
-			songClock = $E('#song'+id+' .clock');
-			songItem = $E('#song'+id);
-		
-			songClock.removeClass('grey');
-			songClock.addClass('green');
-			songClock.setHTML('&mdash;');
-			songItem.addClass('hilite');
-						
-			var name = $E('#song'+ id +' .name').getHTML().replace('&amp;','&');
-			document.title = name.trim() + " / <?php if(!empty($prefs_struct['banner'])) { echo escape_for_json(strip_tags($prefs_struct['banner'])); } else { echo "OPENTAPE"; } ?>";		
-		}
-	
-		function togglePlayback(id) {
-			id = id.replace(/song/,'');
-			songClock = $E('#song'+currentTrack+' .clock');
-			songItem = $E('#song'+currentTrack); 
-			// console.log("togglePlayback called with: " + id + " currentTrack is: " + currentTrack);
-			
-			if (id == currentTrack || id == null) { 
-				if(playerStatus == "PAUSED"|| playerStatus=="IDLE") {
-					songClock.removeClass('grey');
-					songClock.addClass('green');
-					sendEvent('PLAY', true);
-				} else {
-					songClock.removeClass('green');
-					songClock.addClass('grey');	
-					sendEvent('PLAY', false);
-				}
-			} else {
-				stopTrack();
-				currentTrack = id;
-				playTrack();
-			}
-		}
-		
-		// Player maintenance functions
-		function sendEvent(typ,prm) { 
-			if( isReady ) {	thisMovie('openplayer').sendEvent(typ,prm); }
-		}
-
-		function thisMovie(movieName) {
-			if(navigator.appName.indexOf("Microsoft") != -1) { return window[movieName]; }
-			else { return document[movieName]; }
-		}
-		
 	</script>
 				
 	</body>
 </html>
-<?php
-
-	if ($songlist_struct != $songlist_struct_original) {
-    	write_songlist_struct($songlist_struct);
-    }
-    
-?>
