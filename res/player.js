@@ -284,11 +284,11 @@ function setupTrackDisplay(id) {
 // auto advance on track load failure
 function sm_onload() { if(currentPlayerObj.readyState == 2) { nextTrack(); } }
 
-function sm_onplay() { 	playerStatus = "PLAYING"; document.title = document.title.replace(/\u25FC/, '\u25BA');	}
+function sm_onplay() { playerStatus = "PLAYING"; document.title = document.title.replace(/\u25FC/, '\u25BA');	}
 
 function sm_onpause() {	playerStatus = "PAUSED"; document.title = document.title.replace(/\u25BA/, '\u25FC'); }
 
-function sm_onfinish() { debug("sm_onfinish fired"); nextTrack(); }
+function sm_onfinish() { nextTrack(); }
 
 function sm_whileplaying() {
 	
@@ -310,12 +310,3 @@ function sm_whileplaying() {
 	}
 		
 }
-
-//function sm_whileloading() {
-	
-	//debug( this.bytesLoaded + " loaded, " + this.bytesTotal + " total...");
-//	percent_loaded = (Math.round((this.bytesLoaded / this.bytesTotal) * 100 ) * 100 / 100) + '%'; // dumb JS way to get decimals XX.YY
-//	e = new Effect.Morph( $('player-progress-loading'), { style: { width:percent_loaded }, duration: '0.2' }); 
-			
-//}
-

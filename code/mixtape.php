@@ -108,15 +108,14 @@
 		
 	<script type="text/javascript">
 		
-		var openPlaylist=new Array(); // build track array
+		var openPlaylist=new Array(); // build track array, do it in this sequence so files detected as missing in the load-scan are not included
 		openPlaylist.push(<?php
-			$list_str = "";
 			foreach ($songlist_struct as $pos => $row) { $list_str .= "'" . $pos . "',"; }
 			$list_str = preg_replace('/,$/','',$list_str);
 			echo $list_str;
 			?>);
 
-        var pageTitle = "<?php if(!empty($prefs_struct['banner'])) { echo escape_for_json(strip_tags($prefs_struct['banner'])); } else { echo "OPENTAPE"; } ?>";
+        var pageTitle = "<?php echo $page_title; ?>";
             
         event_init(); // bind events where needed
 
