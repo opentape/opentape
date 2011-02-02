@@ -50,10 +50,6 @@
 				<div class="flag">
 					<h1><?php echo $banner_header_text; ?></h1>
 					<h2><?php echo $banner_caption_text; ?></h2>
-<<<<<<< HEAD
-					
-=======
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 				</div>
 			</div>
 				
@@ -114,28 +110,14 @@
 		
 		var openPlaylist=new Array(); // build track array, do it in this sequence so files detected as missing in the load-scan are not included
 		openPlaylist.push(<?php
-<<<<<<< HEAD
-			$list_str = "";
-			foreach ($songlist_struct as $pos => $row) { 
-				//$list_str .= "'" . preg_replace('/=/', '', $pos) . "',";				
-				$list_str .= "'" . $pos . "',";				
-			}
-=======
 			foreach ($songlist_struct as $pos => $row) { $list_str .= "'" . $pos . "',"; }
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 			$list_str = preg_replace('/,$/','',$list_str);
 			echo $list_str;
 			?>);
 
-<<<<<<< HEAD
-        var pageTitle = "<?php if(!empty($prefs_struct['banner'])) { echo escape_for_json(strip_tags($prefs_struct['banner'])); } else { echo "OPENTAPE"; } ?>";
-            
-        event_init();
-=======
         var pageTitle = "<?php echo $page_title; ?>";
             
         event_init(); // bind events where needed
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 
 	</script>
 				

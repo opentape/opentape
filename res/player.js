@@ -3,28 +3,15 @@ var currentTrack;
 var isReady = 0;
 var playerStatus = "";
 var currentPos;
-<<<<<<< HEAD
-=======
-var player;
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
-
 var playerObj = Array();
 
 if (typeof(soundManager)!='undefined') {
 	soundManager.onready(function() {
 	  if (soundManager.supported()) {
-<<<<<<< HEAD
 		isReady = 1;
 	 } else {
 	    // unsupported/error case
 	    alert("Unable to load Sound Manager to play audio :(");
-=======
-	
-		isReady = 1;
-
-	 } else {
-	    // unsupported/error case
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 	  }
 	});
 }
@@ -201,19 +188,10 @@ var Base64 = {
 function togglePlayback(id) {
 
 	id = parseInt(id.replace(/song/,''));
-<<<<<<< HEAD
 	songClock = $$('#song'+currentTrack+' .clock');
 	songItem = $('song'+currentTrack); 
 	
 	if (id == currentTrack && typeof(currentTrack)!='undefined') { 
-=======
-	
-	if (id == currentTrack && typeof(currentTrack)!='undefined') { 
-	
-		songClock = $$('#song'+currentTrack+' .clock');
-    	songItem = $('song'+currentTrack); 
-	
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 		if(playerStatus == "PAUSED") {
 			songClock.removeClass('grey');
 			songClock.addClass('green');
@@ -234,7 +212,6 @@ function togglePlayback(id) {
 function playTrack() {
 
     if(playerObj[0]) { playerObj[0].destruct(); }
-<<<<<<< HEAD
 
     if(playerObj[1]) { 
         tmp = playerObj.shift(); 
@@ -244,31 +221,17 @@ function playTrack() {
     			
 	try { playerObj[0] = soundManager.createSound({
 	  id: 'playerObj' + currentTrack,
-=======
-			
-	try { playerObj[0] = soundManager.createSound({
-	  id: 'currentPlayer',
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 	  url: "songs/" + Base64.decode(openPlaylist[currentTrack]),
 		autoLoad: true,
 		autoPlay: true,
 		onload: sm_onload,
 		onplay: sm_onplay,
-<<<<<<< HEAD
 		onresume: sm_onresume,
 		onpause: sm_onpause,
 		whileplaying: sm_whileplaying,
 //		whileloading: sm_whileloading,
 		onfinish: sm_onfinish,
 	  	volume: 80
-=======
-		onresume: sm_onplay,
-		onpause: sm_onpause,
-		whileplaying: sm_whileplaying,
-//		whileloading: sm_whileloading,
-		onfinish: sm_onfinish
-//	  	volume: player_volume
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
         }); 
 	}
 	catch(err) { debug('Cant create sound: ' + err.description ); }  
@@ -277,7 +240,6 @@ function playTrack() {
 
 }
 
-<<<<<<< HEAD
 function loadNextTrack() {
 
     debug("loadNextTrack() called");
@@ -331,9 +293,6 @@ function fadeOutSound(soundObj,amount) {
 }
 
 
-
-=======
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 function nextTrack() {
 	
 	if (openPlaylist[(currentTrack+1)]) {
@@ -348,20 +307,14 @@ function nextTrack() {
 }
 
 function cleanTrackDisplay(id) {
-<<<<<<< HEAD
-=======
 
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
     if (typeof(id)=='undefined') { return false; }
 	songClock = $$('#song'+id+' .clock');
 	songItem = $('song'+id);
 
 	songItem.removeClass('hilite');		
 	songClock.set('html','');
-<<<<<<< HEAD
-=======
-	
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
+
 }
 
 function setupTrackDisplay(id) {
@@ -382,30 +335,16 @@ function setupTrackDisplay(id) {
 
 
 
-<<<<<<< HEAD
-
 // auto advance on track load failure
 function sm_onload() { if(currentPlayerObj.readyState == 2) { nextTrack(); } }
 function sm_onplay() { playerStatus = "PLAYING"; }
 function sm_onpause() {	playerStatus = "PAUSED"; document.title = document.title.replace(/\u25BA/, '\u25FC'); }
 function sm_onresume() { playerStatus = "PLAYING"; document.title = document.title.replace(/\u25FC/, '\u25BA'); }
-=======
-// auto advance on track load failure
-function sm_onload() { if(currentPlayerObj.readyState == 2) { nextTrack(); } }
-
-function sm_onplay() { playerStatus = "PLAYING"; document.title = document.title.replace(/\u25FC/, '\u25BA');	}
-
-function sm_onpause() {	playerStatus = "PAUSED"; document.title = document.title.replace(/\u25BA/, '\u25FC'); }
-
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 function sm_onfinish() { nextTrack(); }
 
 function sm_whileplaying() {
 	
-<<<<<<< HEAD
     if (this.sID != "playerObj" + currentTrack) { return false; } // ignore timing events for players that are fading in
-=======
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
 	player_position = parseInt(this.position/1000);
 	player_duration = parseInt(this.duration/1000);	
 	
@@ -421,7 +360,6 @@ function sm_whileplaying() {
 		songClock = $$('#song'+currentTrack+' .clock');
 		songClock.set('html', string);
 		currentPos = player_position;
-<<<<<<< HEAD
 
         debug ((player_duration - player_position) + "sec remaining");
         if(is_fade_enabled() && (player_duration - player_position) == 10) { loadNextTrack(); }
@@ -445,9 +383,3 @@ function is_fade_enabled() {
 //	e = new Effect.Morph( $('player-progress-loading'), { style: { width:percent_loaded }, duration: '0.2' }); 
 			
 //}
-
-=======
-	}
-		
-}
->>>>>>> 10ba8627ae7e1d6fd0cc1ed17702e7255ca3e397
