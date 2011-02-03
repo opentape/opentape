@@ -81,8 +81,8 @@
 				
 	</div>
 	
-	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-1.2-core-yc.js"></script>
-	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-1.2-more-yc.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-core-1.3-yc.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-more-1.3-yc.js"></script>
 	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/statusfader.js"></script>
 	<script type="text/javascript">
 		var first = $(document).getElement('input');
