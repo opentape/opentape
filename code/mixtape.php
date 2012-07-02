@@ -34,7 +34,7 @@
 		
 	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-core-1.3-yc.js"></script>
 	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/mootools-more-1.3-yc.js"></script>
-	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/soundmanager2-jsmin.js"></script>
+	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/soundmanager2-nodebug-jsmin.js"></script>
 	<script type="text/javascript" src="<?php echo $REL_PATH; ?>res/player.js"></script>
 
 	<script type="text/javascript">
