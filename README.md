@@ -1,27 +1,31 @@
-
 Welcome to Opentape. We are liberating taste.
 
-* INSTALL *
+INSTALL
+-------
 
-1. Upload the unzipped files and folders into a folder on your website
-2. Open http://yourwebsite.com/that_directory/
-3. Create a password when requested, upload songs.
+1. [Download](https://github.com/Narno/opentape/archive/master.zip) source code
+2. Upload the unzipped files and folders into _a folder_ on your website
+3. Open http://yourwebsite.com/_a folder_/
+4. Create a password when requested, upload songs
 
-You may receive a warning about the songs/ and settings/ folders not being writeable. Check with your webhost about how to make them writeable by the web server. This is required for Opentape to work.
+You may receive a warning about the `songs/` and `settings/` folders not being writeable. Check with your webhost about how to make them writeable by the web server. This is required for Opentape to work.
 
-More details on the forum: http://opentape.fm/forum/
+More details on the [forum](http://opentape.fm/forum/ "Forum").
 
-* CHANGES IN THIS RELEASE *
+CHANGES IN THIS RELEASE
+-----------------------
 
-Please see http://news.opentape.fm/ for a list of updates in this release
+Please see [http://news.opentape.fm/](http://news.opentape.fm/ "News") for a list of updates in this release
 
-* LICENSING *
+LICENSING
+---------
 
 Opentape is (as of version 0.12) licensed under GNU Affero GPL v3.  Please see the LICENSE file for the full license.
 
 Opentape contains code from other projects, that code is licensed as follows:
-mootools - MIT License: http://www.opensource.org/licenses/mit-license.php
-getid3 - GNU GPL: http://getid3.sourceforge.net/source/license.txt
-Services_JSON - BSD License: http://www.opensource.org/licenses/bsd-license.php
-Soundmanager 2 - BSD License: http://www.schillmania.com/projects/soundmanager2/license.txt
-JW Player - CC Attribution-Noncommercial-Share Alike 3.0 Unported: http://creativecommons.org/licenses/by-nc-sa/3.0/ 
+
+* mootools - MIT License: http://www.opensource.org/licenses/mit-license.php
+* getid3 - GNU GPL: http://getid3.sourceforge.net/source/license.txt
+* Services_JSON - BSD License: http://www.opensource.org/licenses/bsd-license.php
+* Soundmanager 2 - BSD License: http://www.schillmania.com/projects/soundmanager2/license.txt
+* JW Player - CC Attribution-Noncommercial-Share Alike 3.0 Unported: http://creativecommons.org/licenses/by-nc-sa/3.0/
