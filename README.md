@@ -3,7 +3,7 @@ Welcome to Opentape. We are liberating taste.
 INSTALL
 -------
 
-1. [Download](https://github.com/Narno/opentape/archive/master.zip) source code
+1. Download this repository as a zip file
 2. Upload the unzipped files and folders into _a folder_ on your website
 3. Open http://yourwebsite.com/_a folder_/
 4. Create a password when requested, upload songs
@@ -15,7 +15,7 @@ More details on the [forum](http://opentape.fm/forum/ "Forum").
 CHANGES IN THIS RELEASE
 -----------------------
 
-Please see [http://news.opentape.fm/](http://news.opentape.fm/ "News") for a list of updates in this release
+Please see http://news.opentape.fm for a list of updates in this release.
 
 LICENSING
 ---------
