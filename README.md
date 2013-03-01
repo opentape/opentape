@@ -4,8 +4,8 @@ INSTALL
 -------
 
 1. Download this repository as a zip file
-2. Upload the unzipped files and folders into _a folder_ on your website
-3. Open `http://yourwebsite.com/_a folder_/`
+2. Upload the unzipped files and folders into _a_folder_ on your website
+3. Open `http://yourwebsite.com/a_folder/`
 4. Create a password when requested
 5. Upload songs
 
