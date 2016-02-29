@@ -2,7 +2,10 @@
 
 	require_once("opentape_common.php");
 	
-	if (!is_logged_in()) { header("Location: " . $REL_PATH . "code/login.php"); }
+	if (!is_logged_in()) {
+		header("Location: " . $REL_PATH . "code/login.php");
+		exit();
+	}
 	
 	check_cookie();
 	

@@ -4,8 +4,9 @@
 
 	check_cookie();
 
-	if(is_password_set()) { 
+	if(is_password_set()) {
 		header("Location: " . $REL_PATH . "code/login.php");
+		exit();
 	}
 	
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
