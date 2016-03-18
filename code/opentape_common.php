@@ -280,7 +280,8 @@ function scan_songs() {
 	// List all the files
     while (false !== ($file = readdir($dir_handle)) ) {
 
-		if ( strcmp($file, ".") && strcmp($file, "..") && !strcasecmp(end(explode(".", $file)), "mp3")) {
+		$tmp = explode(".", $file);
+		if ( strcmp($file, ".") && strcmp($file, "..") && !strcasecmp(end($tmp), "mp3")) {
 
 			// error_log("Analyzing: " . constant("SONGS_PATH") . $file . " file_exists=" . file_exists(constant("SONGS_PATH") . $file));
 			// error_log("id3_structure: " . print_r($id3_info,1) . "\nID3v2:" . $id3_info['id3v2']['comments']['artist'][0] . " - " . $id3_info['id3v2']['comments']['title'][0]);
