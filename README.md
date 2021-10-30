@@ -29,4 +29,3 @@ Opentape contains code from other projects, that code is licensed as follows:
 * getid3 - GNU GPL: http://getid3.sourceforge.net/source/license.txt
 * Services_JSON - BSD License: http://www.opensource.org/licenses/bsd-license.php
 * Soundmanager 2 - BSD License: http://www.schillmania.com/projects/soundmanager2/license.txt
-* JW Player - CC Attribution-Noncommercial-Share Alike 3.0 Unported: http://creativecommons.org/licenses/by-nc-sa/3.0/
