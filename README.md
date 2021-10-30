@@ -16,7 +16,7 @@ More details on the [forum](http://opentape.fm/forum/ "Forum").
 CHANGES IN THIS RELEASE
 -----------------------
 
-Please see http://news.opentape.fm for a list of updates in this release.
+0.13 – Housekeeping changes - no flash, updates to php id3 libs, other minor fixes. works on php7/8 again.
 
 LICENSING
 ---------
