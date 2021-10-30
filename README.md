@@ -11,8 +11,6 @@ INSTALL
 
 You may receive a warning about the `songs/` and `settings/` folders not being writeable. Check with your webhost about how to make them writeable by the web server. This is required for Opentape to work.
 
-More details on the [forum](http://opentape.fm/forum/ "Forum").
-
 CHANGES IN THIS RELEASE
 -----------------------
 
