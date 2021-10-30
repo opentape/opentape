@@ -9,7 +9,7 @@ define("SONGS_PATH", "songs/");
 define("DEFAULT_COLOR", "EC660F");
 // --- END OF CONFIGURABLE ADVANCED SETTINGS ---- //
 
-require_once ('JSON.php');
+// require_once ('JSON.php');
 ini_set("track_errors","on");
 
 global $REL_PATH;
@@ -19,7 +19,7 @@ $REL_PATH = preg_replace('|code/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|res/[^/]*?$|', '', $REL_PATH);
 $REL_PATH = preg_replace('|/[^/]+?$|', '/', $REL_PATH);
 $REL_PATH = preg_replace('|/+|', '/', $REL_PATH);
-define("VERSION", "0.12");
+define("VERSION", "0.13");
 define("VERSION_CHECK_URL", "http://opentape.fm/public/latest_version.php");
 define("ANNOUNCE_SONGS_URL", "http://opentape.fm/public/announce_songs.php");
 define("ANNOUNCE_JS_URL", "http://opentape.fm/public/announce.js");
@@ -117,26 +117,6 @@ function is_logged_in() {
 
 function check_password($password) {
 
-/*	
-	$password_struct = array();
-
-	if (file_exists(constant("SETTINGS_PATH") . ".opentape_password.array")) {
-		
-		$password_struct_data = file_get_contents( constant("SETTINGS_PATH") . ".opentape_password.array" );
-		if(empty($password_struct_data) || $password_struct_data===false) {
-			return -1;
-		}
-	
-		$password_struct = unserialize($password_struct_data); 
-		if(empty($password_struct_data) || $password_struct_data===false) {
-			return -1;
-		}
-	
-	} else {
-		return -1;
-	}
-*/
-
 	$password_struct = get_password_struct();		
 		
 	if (!strcmp( md5("MIXTAPESFORLIFE" . $password), $password_struct['hash']) ) {
@@ -156,24 +136,7 @@ function is_password_set() {
 	} else {
 		return false;
 	}
-	
-/*
-	if (file_exists(constant("SETTINGS_PATH") . ".opentape_password.array")) {
-	
-		$password_struct_data = file_get_contents( constant("SETTINGS_PATH") . ".opentape_password.array" );
-		if(empty($password_struct_data)) {
-			return false;
-		} elseif ($password_struct_data===false) {
-			return -1; // this is a read error
-		} else {
-			return true; // password exists
-		}
-	
-	} else {
-		return false;
-	}
-*/
-	
+		
 }
 
 function set_password($password) {
@@ -183,16 +146,6 @@ function set_password($password) {
 	
 	return write_password_struct($password_struct);
 	
-	/*
-	$bytes_written = file_put_contents( constant("SETTINGS_PATH") . ".opentape_password.array", serialize($password_struct));
-	
-	if ($bytes_written===false) {
-		return false;
-	} else {
-		return true;
-	}
-	*/
-
 }
 
 // Here we give all users cookies, then we add/remove these session id's
@@ -280,7 +233,7 @@ function scan_songs() {
 	// List all the files
     while (false !== ($file = readdir($dir_handle)) ) {
 
-		if ( strcmp($file, ".") && strcmp($file, "..") && !strcasecmp(end(explode(".", $file)), "mp3")) {
+		if ($file!=="." && $file!==".." && preg_match('/\.mp3$/', $file)) {
 
 			// error_log("Analyzing: " . constant("SONGS_PATH") . $file . " file_exists=" . file_exists(constant("SONGS_PATH") . $file));
 			// error_log("id3_structure: " . print_r($id3_info,1) . "\nID3v2:" . $id3_info['id3v2']['comments']['artist'][0] . " - " . $id3_info['id3v2']['comments']['title'][0]);
@@ -656,8 +609,7 @@ function check_for_update() {
 	
 	$result = do_post_request(constant("VERSION_CHECK_URL"), http_build_query(array('version'=>constant("VERSION"))), null);
 
-	$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);	
-	$version_struct = $json->decode(stripslashes($result));
+	$version_struct = json_decode(stripslashes($result),true);
 
 	if ($version_struct!==false && is_array($version_struct)) {
 		$prefs_struct['latest_opentape'] = $version_struct['version'];
@@ -686,9 +638,8 @@ function announce_songs($songlist_struct) {
 	$ts = time();
 	
 	$prefs_struct = get_opentape_prefs();
-
-	$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);	
-	$version_struct = $json->encode($songlist_struct);
+	
+	$version_struct = json_encode($songlist_struct);
 
 	$data = http_build_query(
 			array(
