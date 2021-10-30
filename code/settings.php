@@ -68,17 +68,11 @@
                 <div class="section">
                     <h2>Embed Your Mix</h2>
                     <textarea scrolbars="no" name="codebox" cols="70" rows="4" readonly="readonly" id="codebox">
-<object width="300" height="160">
-<param name="allowscriptaccess" value="always" />	
-<param name="movie" value="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" />	
-<embed src="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="160"></embed>
-</object>
+<p>Embedding unavailable</p>
 </textarea>
-<object width="300" height="160">
-                        <param name="allowscriptaccess" value="always" />	
-                        <param name="movie" value="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" />	
-                        <embed src="<?php echo get_base_url(); ?>res/jw_player.swf?playlist=bottom&displayheight=0&thumbsinplaylist=false&file=<?php echo get_base_url(); ?>code/xspf.php" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="160"></embed>
-                    </object>
+
+<p>Embedding unavailable</p>
+
 
 </div>
                 <div class="section">

@@ -336,7 +336,7 @@ function setupTrackDisplay(id) {
 
 
 // auto advance on track load failure
-function sm_onload() { if(currentPlayerObj.readyState == 2) { nextTrack(); } }
+function sm_onload() { if(typeof(currentPlayerObj)!="undefined" && currentPlayerObj.readyState == 2) { nextTrack(); } }
 function sm_onplay() { playerStatus = "PLAYING"; }
 function sm_onpause() {	playerStatus = "PAUSED"; document.title = document.title.replace(/\u25BA/, '\u25FC'); }
 function sm_onresume() { playerStatus = "PLAYING"; document.title = document.title.replace(/\u25FC/, '\u25BA'); }
@@ -361,7 +361,7 @@ function sm_whileplaying() {
 		songClock.set('html', string);
 		currentPos = player_position;
 
-        debug ((player_duration - player_position) + "sec remaining");
+        // debug ((player_duration - player_position) + "sec remaining");
         if(is_fade_enabled() && (player_duration - player_position) == 10) { loadNextTrack(); }
         else if(is_fade_enabled() && (player_duration - player_position) == 5) { beginFadeTransition(); } 
 

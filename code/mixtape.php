@@ -40,7 +40,7 @@
 	<script type="text/javascript">
         soundManager.debugMode = false;
         soundManager.url = 'res/';
-        if(Browser.Platform.ios) { soundManager.useHTML5Audio = true; }
+		soundManager.useHTML5Audio = true;
 	</script>
 	</head>
 	
@@ -110,6 +110,7 @@
 		
 		var openPlaylist=new Array(); // build track array, do it in this sequence so files detected as missing in the load-scan are not included
 		openPlaylist.push(<?php
+			$list_str = "";
 			foreach ($songlist_struct as $pos => $row) { $list_str .= "'" . $pos . "',"; }
 			$list_str = preg_replace('/,$/','',$list_str);
 			echo $list_str;
